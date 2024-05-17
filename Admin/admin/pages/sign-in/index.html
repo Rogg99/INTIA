@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title> INTIA</title>
+    <link rel="icon" type="image/x-icon" href="../../favicon.ico">
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/sign-in/">
+    <!-- Bootstrap core CSS -->
+    <link href="../../src/css/bootstrap.min.css" rel="stylesheet">
+    <script src="../../src/js/back.js"></script>
+    <!-- Toastr -->
+	  <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
+    <script>
+      console.log('js loaded...');
+      checkCookie();
+    </script>
+    <!-- Custom styles for this template -->
+    <link href="signin.css" rel="stylesheet">
+  </head>
+  <body class="text-center" >
+    <main class="form-signin" style="position: relative;right: 200px;">
+      <form>
+        <img class="mb-4" src="../../logo_flatten.png" alt="" width="300" height="250">
+        <h1 class="h3 mb-3 fw-normal" style="color: aliceblue;"><b>Welcome</b></h1>
+
+        <div class="form-floating">
+          <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+          <label for="floatingInput">Email</label>
+        </div>
+        <div class="form-floating">
+          <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
+          <label for="floatingPassword">Password</label>
+        </div>
+        <button class="w-100 btn btn-lg btn-success"  type="button"  onclick="connexion()">
+          <img src="../../src/img/loading2.gif" height="30" width="30" id="progress">
+            Sign in
+        </button>
+        <br>
+        <br>
+        <p class="mb-3 fw-normal" id= "error" style="color: red;font-style: italic;"> No matching email or password  </p>
+      </form>
+    </main>
+    <!-- Toastr -->
+	  <script src="http://code.jquery.com/jquery-2.0.3.min.js" ></script>
+	  <script src="http://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <script>
+       progressbar=document.getElementById("progress");
+       errorMessage=document.getElementById("error");
+       progressbar.style.visibility="hidden";
+       errorMessage.style.visibility="hidden";
+        progressbar.style.height="0";
+        progressbar.style.width="0";
+       mail_input=document.getElementById("floatingInput");
+       password_input=document.getElementById("floatingPassword");
+       //feather.replace() ; 
+    </script>
+    <!-- Toastr -->
+    <script src="signin.js"></script>
+  </body>
+</html>

@@ -1,0 +1,458 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <title>INTIA Admin </title>
+    <link rel="icon" type="image/x-icon" href="../../favicon.ico">
+
+    <script src="../../src/js/bootstrap.bundle.min.js"></script>
+    <script src="../sidebars/sidebars.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js" integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
+    <!-- daterange picker -->
+    <link rel="stylesheet" href="plugins/daterangepicker/daterangepicker.css">
+    <!-- iCheck for checkboxes and radio inputs -->
+    <link rel="stylesheet" href="plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+    <!-- Bootstrap Color Picker -->
+    <link rel="stylesheet" href="plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css">
+    <!-- Toastr -->
+    <link rel="stylesheet" href="plugins/toastr/toastr.min.css">
+    <!-- Tempusdominus Bootstrap 4 -->
+    <link rel="stylesheet" href="plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+    <!-- Select2 -->
+    <link rel="stylesheet" href="plugins/select2/css/select2.min.css">
+    <link rel="stylesheet" href="plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+    <!-- Bootstrap4 Duallistbox -->
+    <link rel="stylesheet" href="plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css">
+    <!-- BS Stepper -->
+    <link rel="stylesheet" href="plugins/bs-stepper/css/bs-stepper.min.css">
+    <!-- dropzonejs -->
+    <link rel="stylesheet" href="plugins/dropzone/min/dropzone.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="dist/css/adminlte.min.css">
+    <script>
+      if (getCookie("user-token") == "") {
+        window.location.replace("../../pages/sign-in/index.html");
+      }
+      function getCookie(cname) {
+        let name = cname + "=";
+        let ca = document.cookie.split(';');
+        for(let i = 0; i < ca.length; i++) {
+          let c = ca[i];
+          while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+          }
+          if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+          }
+        }
+        return "";
+      }
+    </script>
+<!-- Custom styles for this template -->
+    <link href="dashboard.css" rel="stylesheet">
+  </head>
+  <body class="sidebar-collapsed dark-mode">
+    <div class="wrapper">
+      
+      <div class="content-wrapper bg-dark" style="margin-left: 0;">
+          <section class="content">
+            <div class="container-fluid">
+              <div class="row">
+                <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4" >
+                  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2" id="sectionTitle">Administrators <img src="../../src/img/loading2.gif" height="30" width="30" id="progress2" hidden> </h1>
+                  </div>
+                  <!-- Banner -->
+                  <div class="card card-primary bg-dark" id="setBanner">
+                      <div class="card-header">
+                      <h3 class="card-title">Create a new Administrator</h3>
+                      </div>
+                      <!-- /.card-header -->
+                      <!-- form start -->
+                      <form onsubmit="event.preventDefault(); Submit();">
+                      <div class="card-body">
+                          <div class="form-group">
+                            <label for="exampleInputEmail1">First Name</label>
+                            <input type="text" class="form-control" id="nom" placeholder="First Name">
+                          </div>
+                          <div class="form-group">
+                            <label for="exampleInputPassword1">Second Name</label>
+                            <input type="text" class="form-control" id="prenom" placeholder="Second Name">
+                          </div>
+                          <div class="form-group">
+                            <label for="exampleInputPassword1">Email</label>
+                            <input type="text" class="form-control" id="email" placeholder="Second Name">
+                          </div>
+                          <div class="form-group">
+                            <label for="exampleInputPassword1">Password</label>
+                            <input type="text" class="form-control" id="password" placeholder="Second Name">
+                          </div>
+                          <div class="form-group">
+                            <label for="exampleInputPassword1">Description</label>
+                            <textarea class="form-control" rows="3" id="description" placeholder="Write some texte"></textarea>
+                          </div>
+                          <div class="row">
+                            <div class="form-group col-lg-6 col-xl-4">
+                              <label>City</label>
+                              <input type="text" class="form-control" id="city" placeholder="Douala">
+                            </div>
+                            <div class="form-group col-lg-6 col-xl-4">
+                              <label>Country</label>
+                              <input type="text" class="form-control" id="country" placeholder="Cameroon">
+                            </div>
+                          </div>
+                          <div class="form-group  bg-dark">
+                            <label>Position</label>
+                            <select class="form-control select2bs4" id="position" style="width: 100%;">
+                              <option selected="selected">Communication Team Member</option>
+                              <option>Communication Chief</option>
+                              <option>Communication Chief Sup</option>
+                              <option>Sells Team Member</option>
+                              <option>Sells admin</option>
+                              <option>Admin</option>
+                              <option>Citoyen</option>
+                            </select>
+                          </div>
+                          <div class="form-group">
+                            <label for="exampleInputFile">Image</label>
+                            <div class="input-group">
+                                <div class="custom-file">
+                                <input type="file" class="custom-file-input" accept=".jpg,.png,.jpeg" id="exampleInputFile"  onchange="readURL(this);">
+                                <label class="custom-file-label" for="exampleInputFile">Choose file</label>
+                                </div>
+                            </div>
+                          </div>
+                      
+                          <div class="form-group">
+                            <img class="img-fluid  col-lg-6"  id="choosenImage" src="#" alt="Photo">
+                          </div>
+                      </div>
+                      <script>
+                        document.getElementById('progress2').style.visibility='hidden';
+                        if(document.getElementById('choosenImage').getAttribute('src')=='#')
+                          document.getElementById('choosenImage').style.visibility='hidden';
+
+                        function readURL(input) {
+                          if (input.files && input.files[0]) {
+                            var reader = new FileReader();
+
+                            reader.onload = function (e) {
+                              $('#choosenImage').attr('src', e.target.result).css('visibility', 'visible');
+                            };
+
+                            reader.readAsDataURL(input.files[0]);
+                          }
+                        }
+                      </script>
+                      
+                      <!-- /.card-body -->
+      
+                      <div class="card-footer">
+                        <button id="submitbtn" class="btn btn-primary">Submit</button>
+                        <img src="../../src/img/loading2.gif" height="30" width="30" id="progressload" style="visibility: hidden;">
+                        <button id="refreshbtn" class="btn btn-primary float-right" onclick="refresh()" hidden>Add Another One</button>
+                      </div>
+                      </form>
+                  </div>
+                  <!-- /.card -->
+                </main> 
+              </div>
+            </div>
+          </section>
+      </div>
+
+    </div>
+  </body>
+  <script type="text/javascript">
+    feather.replace(); 
+    const API_URL='http://www.soft.pcrn-org.com/m/pcrn/';
+    const objectName='admin'
+    feather.replace();
+    const loader= document.getElementById('progressload');
+    const queryString = window.location.search; 
+    const urlParams = new URLSearchParams(queryString);
+    var id = urlParams.get('id');
+    console.log(id);
+    var edit=false;
+    var object={};
+    var inputs=document.getElementsByTagName('input')
+    if(id!=null){
+      document.getElementById('newsbtn').href='article.html?candidate_id='+id;
+      document.getElementById('newsbtn').hidden=false;
+      edit=false;
+      inputs.forEach(element => {
+        element.disabled=true;
+      });
+      document.getElementById('submitbtn').innerHTML='Set';
+      var res
+      load_object(id).then(result=>{
+        if(result){
+          document.getElementById('nom').value=object.nom
+          document.getElementById('prenom').value=object.prenom
+          document.getElementById('description').value=object.description
+          document.getElementById('position').value=object.type
+          document.getElementById('city').value=object.city
+          document.getElementById('country').value=object.country
+          document.getElementById('choosenImage').src=API_URL+object.image
+        }
+        else{
+          edit=true;
+          inputs.forEach(element => {
+            element.disabled=false;
+          });
+          document.getElementById('submitbtn').innerHTML='Submit';
+        }
+      })
+    }
+    else{
+      edit=true;
+    }
+
+    async function load_object(id,objectName){
+        const myHeaders = new Headers();
+        myHeaders.append("Authorization", "Bearer "+getCookie('user-token'));
+        loader.style.visibility='visible';
+        
+        const raw = '';
+        
+        const requestOptions = {
+          method: "GET",
+          headers: myHeaders,
+          redirect: "follow"
+        };
+
+        var res=true;
+        try {
+          const response = await fetch(API_URL+objectName+"/get?id="+id, requestOptions);
+          const result = await response.json();
+          console.log(result);
+          if(result.error==false)
+          object=result.data
+          if(result.error){
+            res=false;
+            toastr.success("Operation reussie !");
+          }
+          else
+          toastr.error("Echec de l'operation!");
+        } catch (error) {
+          console.error(error);
+          toastr.error("Echec de l'operation!");
+          res=false;
+        };
+        loader.style.visibility='invisible';
+        return res;
+    }
+
+    async function set_object(value,objectName){
+        const myHeaders = new Headers();
+        myHeaders.append("Authorization", "Bearer "+getCookie('user-token'));
+        loader.style.visibility='visible';
+        
+        const raw = JSON.stringify(value);
+        
+        const requestOptions = {
+          method: "POST",
+          headers: myHeaders,
+          body: raw,
+          redirect: "follow"
+        };
+
+        var res=true;
+        try {
+          const response = await fetch(API_URL+objectName+"/set", requestOptions);
+          const result = await response.json();
+          console.log(result);
+          if(result.error==false)
+          toastr.success("Operation reussie !");
+          if(result.error)
+          toastr.error("Echec de l'operation!");
+        } catch (error) {
+          console.error(error);
+          toastr.error("Echec de l'operation!");
+          res=false;
+        };
+        loader.style.visibility='hidden';
+        return res;
+    }
+
+    async function add_object(value,objectName){
+        const myHeaders = new Headers();
+        myHeaders.append("Authorization", "Bearer "+getCookie('user-token'));
+        loader.style.visibility='visible';
+        
+        const raw = JSON.stringify(value);
+        
+        const requestOptions = {
+          method: "POST",
+          headers: myHeaders,
+          body: raw,
+          redirect: "follow"
+        };
+
+        var res=true;
+        try {
+          const response = await fetch(API_URL+objectName+"/add", requestOptions);
+          const result = await response.json();
+          console.log(result);
+          if(result.error==false){
+            toastr.success("Operation reussie !");
+            return result.data
+          }
+          if(result.error)
+          toastr.error("Echec de l'operation!");
+        } catch (error) {
+          console.error(error);
+          toastr.error("Echec de l'operation!");
+          res=false;
+        };
+        loader.style.visibility='hidden';
+        return res;
+    }
+        
+    async function upload(input,type='image'){
+        const myHeaders = new Headers();
+        myHeaders.append("Authorization", "Bearer "+getCookie('user-token'));
+        var blobFile = input.files[0];
+        var formData = new FormData();
+        formData.append(type, blobFile);
+        loader.style.visibility='visible';
+        
+        const requestOptions = {
+          method: "POST",
+          headers: myHeaders,
+          body: formData,
+          redirect: "follow"
+        };
+
+        var res='';
+        try {
+          const response = await fetch(API_URL+"upload"+type, requestOptions);
+          const result = await response.json();
+          console.log(result);
+          if(result.error==false){
+            res = result.data.fileurl
+            toastr.success("Upload reussie !");
+          }
+          if(result.error)
+          toastr.error("Echec de l'operation!");
+        } catch (error) {
+          console.error(error);
+          toastr.error("Echec de l'operation!");
+        };
+        loader.style.visibility='hidden';
+        return res;
+    }
+
+    async function Submit(){
+      document.getElementById('refreshbtn').hidden=true;
+
+      if(document.getElementById('submitbtn').innerHTML=='Submit'){
+        if(document.getElementById('nom').value=='' || document.getElementById('prenom').value=='' ||
+           document.getElementById('email').value=='' || document.getElementById('password').value==''||  
+           document.getElementById('description').value=='' || document.getElementById('city').value==''  
+           || document.getElementById('country').value=='' )
+        toastr.error("Remplissez tous les champs!");
+        if(document.getElementById('choosenImage').src=='#' )
+        toastr.error("Veuillez ajouter une image");
+
+        var body={
+          id:id,
+          nom:document.getElementById('nom').value,
+          prenom:document.getElementById('prenom').value,
+          email:document.getElementById('email').value,
+          password:document.getElementById('password').value,
+          type:document.getElementById('position').value,
+          city:document.getElementById('city').value,
+          country:document.getElementById('country').value,
+          description:document.getElementById('description').value,
+          photo:document.getElementById('choosenImage').src,
+        }
+        var img=''
+        if(!body.photo.startsWith('http'))
+          img=await upload(document.getElementById('exampleInputFile'))
+        if(img!=''){
+          console.log(img)
+          body.photo=img
+          if(id!=null){
+            await set_object(body,objectName)
+            try {
+              id=res.id;
+              document.getElementById('submitbtn').innerHTML='Set';
+              document.getElementById('refreshbtn').hidden=false;
+            } catch (error) {
+              console.log(error)
+            }
+          }
+          else{
+            var res = await add_object(body,objectName)
+            try {
+              id=res.id;
+              document.getElementById('submitbtn').innerHTML='Submit';
+              document.getElementById('refreshbtn').hidden=false;
+            } catch (error) {
+              console.log(error)
+            }
+          }
+        }
+      }
+      else{
+        edit=true;
+        document.getElementsByTagName('input').forEach(element => {
+          element.disabled=false;
+        });
+        document.getElementById('submitbtn').innerHTML='Submit';
+      }
+      loader.hidden=true;
+    }
+
+    function refresh(){
+      id=null
+      document.getElementById('refreshbtn').hidden=true;
+      loader.hidden=true;
+      document.getElementById('submitbtn').innerHTML='Submit';
+      document.getElementById('nom').value='';
+      document.getElementById('prenom').value='';
+      document.getElementById('description').value='';
+      document.getElementById('country').value='';
+      document.getElementById('city').value='';
+      document.getElementById('choosenImage').src='#';
+      document.getElementById('progress2').style.visibility='hidden';
+      document.getElementById('choosenImage').style.visibility='hidden';
+    }
+
+    //load_datas();
+  </script>
+
+    <!-- jQuery -->
+    <script src="plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- Select2 -->
+    <script src="plugins/select2/js/select2.full.min.js"></script>
+    <!-- Bootstrap4 Duallistbox -->
+    <script src="plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js"></script>
+    <!-- InputMask -->
+    <script src="plugins/moment/moment.min.js"></script>
+    <!-- Toastr -->
+    <script src="plugins/toastr/toastr.min.js"></script>
+    <script src="plugins/inputmask/jquery.inputmask.min.js"></script>
+    <!-- date-range-picker -->
+    <script src="plugins/daterangepicker/daterangepicker.js"></script>
+    <!-- bootstrap color picker -->
+    <script src="plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js"></script>
+    <!-- Tempusdominus Bootstrap 4 -->
+    <script src="plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+    <!-- BS-Stepper -->
+    <script src="plugins/bs-stepper/js/bs-stepper.min.js"></script>
+    <!-- dropzonejs -->
+    <script src="plugins/dropzone/min/dropzone.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="dist/js/adminlte.min.js"></script>
+    <!-- AdminLTE for demo purposes -->
+    <script src="dist/js/demo.js"></script>
+    <!-- Page specific script -->
+</html>

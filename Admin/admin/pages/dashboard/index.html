@@ -1,0 +1,680 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <title>INTIA Admin </title>
+    <link rel="icon" type="image/x-icon" href="../../favicon.ico">
+
+    <script src="../../src/js/bootstrap.bundle.min.js"></script>
+    <script src="../sidebars/sidebars.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js" integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <!-- Bootstrap core CSS -->
+    <link href="../../src/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- iCheck -->
+    <link rel="stylesheet" href="plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+    <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
+    <!-- Toastr -->
+    <link rel="stylesheet" href="plugins/toastr/toastr.min.css">
+    <!-- JQVMap -->
+    <link rel="stylesheet" href="plugins/jqvmap/jqvmap.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="dist/css/adminlte.min.css">
+    <!-- overlayScrollbars -->
+    <link rel="stylesheet" href="plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+    <!-- Daterange picker -->
+    <link rel="stylesheet" href="plugins/daterangepicker/daterangepicker.css">
+    <!-- summernote -->
+    <link rel="stylesheet" href="plugins/summernote/summernote-bs4.min.css">
+    <!-- jQuery -->
+    <script src="plugins/jquery/jquery.min.js"></script>
+    <!-- jQuery UI 1.11.4 -->
+    <script src="plugins/jquery-ui/jquery-ui.min.js"></script>
+    <script>
+      if (getCookie("user-token") == "") {
+        window.location.replace("../../pages/sign-in/index.html");
+      }
+      function getCookie(cname) {
+        let name = cname + "=";
+        let ca = document.cookie.split(';');
+        for(let i = 0; i < ca.length; i++) {
+          let c = ca[i];
+          while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+          }
+          if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+          }
+        }
+        return "";
+      }
+    </script>
+<!-- Custom styles for this template -->
+    <link href="dashboard.css" rel="stylesheet">
+  </head>
+  <body onload="initialize()" class="dark-mode">
+    <div class="wrapper">
+      <header class="navbar navbar-dark sticky-top flex-md-nowrap p-0 shadow  bg-dark">
+        <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#"><img src="../../logo_flatten.png" height="40" width="60%" style="margin-left: 20%;"></a>
+        <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <h1 style="color: #ffffff;">Hi 
+          <script>
+            document.write(getCookie('userpre'));
+            var dashboard_vars = {
+              clients:0,
+              cotisations:0,
+              chartClients:[0,0,0,0,0,0],
+              chartCotisations:[0,0,0,0,0,0],
+            }
+            
+          </script> 
+        </h1>
+        <div class="navbar-nav">
+          <div class="nav-item text-nowrap">
+          </div>
+        </div>
+        
+      <div class="dropdown" style="position: absolute; top: 20px; right: 80px;">
+        <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+          <script>
+            if(getCookie('userphoto')!='' && getCookie('userphoto')!='none')
+              document.write('<img src="'+getCookie('userphoto')+'" alt="" width="32" height="32" class="rounded-circle me-2">');
+            else
+              document.write('<img src="dist/img/usericon.png" alt="" width="32" height="32" class="rounded-circle me-2">');
+          </script>
+          <strong> 
+            <script>
+              document.write(getCookie('userpre'));
+            </script>
+          </strong>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
+          <li><a class="dropdown-item profile nav-link" href="#" onclick="active(this)">Profile</a></li>
+          <li>_____________________</li>
+          <li><a class="dropdown-item" href="#" onclick="signOut()">Sign out</a></li>
+        </ul>
+      </div>
+      </header>
+      
+      <div class="content-wrapper bg-dark" style="margin-left: 0;">
+          <section class="content">
+            <div class="container-fluid">
+              <div class="row">
+                <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-dark sidebar collapse">
+                  <div class="position-sticky pt-3"  style="margin-top: 10px;">
+                    <ul class="nav flex-column">
+                      <li class="nav-item">
+                        <a class="nav-link active dashboard" onclick="active(this)" aria-current="page" href="#">
+                          <span data-feather="home"></span>
+                          Dashboard
+                        </a>
+                      </li>
+                      <li class="nav-item ">
+                        <a class="nav-link clients " onclick="active(this)" href="#">
+                          <span data-feather="file"></span>
+                          Clients
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link assurances" onclick="active(this)" href="#">
+                          <span data-feather="image"></span>
+                          Assurances
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link users" onclick="active(this)" href="#">
+                          <span data-feather="users"></span>
+                          Users
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </nav>
+                <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4" >
+                  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2" id="sectionTitle">Dashboard <img src="../../src/img/loading2.gif" height="30" width="30" id="progress2"> </h1>
+                    
+                    <button id="addBtn" class="btn btn-primary float-right" style="margin-right: 10px" onclick="addObject()"><span data-feather="plus"></span> Ajouter
+                    </button>
+                    <script>
+                      if(document.getElementsByClassName('dashboard')[0].classList.contains('active')){
+                        document.getElementById('addBtn').style.visibility='hidden';
+                      }
+                      else{
+                        document.getElementById('addBtn').style.visibility='visible';
+                      }
+                    </script>
+                  </div>
+                  <div id="dashboard" class="main-content">
+                    <!-- Small boxes (Stat box) -->
+                    <div class="row">
+                      <div class="col-lg-3 col-6">
+                        <!-- small box -->
+                        <div class="small-box bg-info">
+                          <div class="inner">
+                            <h3 id="dashboard_vars_clients">
+                              0
+                            </h3>
+
+                            <p>New Clients</p>
+                          </div>
+                          <div class="icon">
+                            <i class="ion ion-bag"></i>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- ./col -->
+                      <div class="col-lg-3 col-6">
+                        <!-- small box -->
+                        <div class="small-box bg-success">
+                          <div class="inner">
+                            <h3 id="dashboard_vars_cotisations">
+                              0 <sup style="font-size: 20px">Fcfa</sup></h3>
+                            <p>Cotisations</p>
+                          </div>
+                          <div class="icon">
+                            <i class="ion ion-stats-bars"></i>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- ./col -->
+                    </div>
+                           
+                    <div class="row">
+                      <!-- Left col -->
+                        <!-- Custom tabs (Charts with tabs)-->
+                        <div class="card">
+                          <div class="card-header">
+                            <h3 class="card-title">
+                              <i class="fas fa-chart-pie mr-1"></i>
+                              Clients
+                            </h3>
+                            <div class="card-tools">
+                              <ul class="nav nav-pills ml-auto">
+                              </ul>
+                            </div>
+                          </div><!-- /.card-header -->
+                          <div class="card-body">
+                            <div class="tab-content p-0">
+                              <!-- Morris chart - Sales -->
+                              <div class="chart tab-pane active" id="revenue-chart"
+                                  style="position: relative; height: 300px;">
+                                  <canvas id="revenue-chart-canvas" height="300" style="height: 300px;"></canvas>
+                              </div>
+                              <div class="chart tab-pane" id="sales-chart" style="position: relative; height: 300px;">
+                                <canvas id="sales-chart-canvas" height="300" style="height: 300px;"></canvas>
+                              </div>
+                            </div>
+                          </div><!-- /.card-body -->
+                        </div>
+                      <div class="card ">
+                        <div class="card-header">
+                          <h3 class="card-title"> 
+                            <i class="fas fa-chart-bar mr-1"></i>
+                            Cotisations
+                          </h3>
+          
+                        </div>
+                        <div class="card-body">
+                          <div class="chart">
+                            <canvas id="barChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                          </div>
+                        </div>
+                        <!-- /.card-body -->
+                      </div>
+                      <!-- /.card -->
+                      <!-- right col -->
+                    </div>
+                  </div>
+                  <div id="clients" class="main-content  hide">
+                    
+                    <div class="card bg-dark">
+                      <!-- /.card-header -->
+                      <div class="card-body table-responsive p-0">
+                        <table class="table  table-hover" id="clientsTable">
+                          <thead class="bg-primary">
+                            <tr>
+                              <th>Full Name</th>
+                              <th>Photo</th>
+                              <th>Position</th>
+                              <th>Branche</th>
+                              <th>Status</th>
+                              <th>Actions</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                          </tbody>
+                        </table>
+                        <button class="btn btn-primary w-40 float-right" style="margin-right: 10px" onclick="loadmoreCandidate()">
+                          Load more 
+                          <img src="../../src/img/loading2.gif" height="30" width="30" id="progressloadClients" style="visibility: hidden;">
+                        </button>
+                      </div>
+                      <!-- /.card-body -->
+                    </div>
+
+                  </div>
+                  <div id="succursales" class="main-content  hide">
+                    <div class="card bg-dark">
+                      <!-- /.card-header -->
+                      <div class="card-body table-responsive p-0">
+                        <table class="table  table-hover" id="succursalesTable">
+                          <thead class="bg-primary">
+                            <tr>
+                              <th>Name</th>
+                              <th>Localisation</th>
+                              <th>Status</th>
+                              <th>Actions</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                          </tbody>
+                        </table>
+                        <br>
+                        <button class="btn btn-primary w-40 float-right" style="margin-right: 10px" onclick="loadmoreSuccursales()">
+                          Load more 
+                          <img src="../../src/img/loading2.gif" height="30" width="30" id="progressloadSuccursales" style="visibility: hidden;">
+                        </button>
+                      </div>
+                      <!-- /.card-body -->
+                    </div>
+                  </div>
+                  <div id="users" class="main-content  hide">
+                    
+                    <div class="card bg-dark">
+                      <!-- /.card-header -->
+                      <div class="card-body table-responsive p-0">
+                        <table class="table  table-hover" id="usersTable">
+                          <thead class="bg-primary">
+                            <tr>
+                              <th>Full Name</th>
+                              <th>Photo</th>
+                              <th>Position</th>
+                              <th>Branche</th>
+                              <th>Status</th>
+                              <th>Actions</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                          </tbody>
+                        </table>
+                        <br>
+                        <button class="btn btn-primary w-40 float-right" style="margin-right: 10px" onclick="loadmoreUsers()">
+                          Load more 
+                          <img src="../../src/img/loading2.gif" height="30" width="30" id="progressloadUsers" style="visibility: hidden;">
+                        </button>
+                      </div>
+                      <!-- /.card-body -->
+                    </div>
+
+                  </div>
+                  <div id="assurances" class="main-content  hide">
+                    <div class="card bg-dark">
+                      <!-- /.card-header -->
+                      <div class="card-body table-responsive p-0">
+                        <table class="table  table-hover" id="assurancesTable">
+                          <thead class="bg-primary">
+                            <tr>
+                              <th>Date</th>
+                              <th>Client Name</th>
+                              <th>Branch Name</th>
+                              <th>Type</th>
+                              <th>Status</th>
+                              <th>Actions</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                          </tbody>
+                        </table>
+                        <br>
+                        <button class="btn btn-primary w-40 float-right" style="margin-right: 10px" onclick="loadmoreAssurance()">
+                          Load more 
+                          <img src="../../src/img/loading2.gif" height="30" width="30" id="progressloadAssurances" style="visibility: hidden;">
+                        </button>
+                      </div>
+                      <!-- /.card-body -->
+                    </div>
+
+                  </div>
+                  <div id="userCotisations" class="main-content  hide">
+                    <div class="card bg-dark">
+                      <!-- /.card-header -->
+                      <div class="card-body table-responsive p-0">
+                        <table class="table  table-hover" id="cotisationsTable">
+                          <thead class="bg-primary">
+                            <tr>
+                              <th>Date</th>
+                              <th>Amount</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                          </tbody>
+                        </table>
+                        <br>
+                        <button class="btn btn-primary w-40 float-right" style="margin-right: 10px" onclick="loadmoreCotisation()">
+                          Load more 
+                          <img src="../../src/img/loading2.gif" height="30" width="30" id="progressloadCotisations" style="visibility: hidden;">
+                        </button>
+                      </div>
+                      <!-- /.card-body -->
+                    </div>
+
+                  </div>
+                  <div  id="user" class="main-content  hide" style="display: none; overflow-x: hidden;">
+                    <div class="row">
+                      <div class="col-md-3">
+                        <!-- Profile Image -->
+                        <div class="card card-primary card-outline">
+                          <div class="card-body box-profile">
+                            <div class="text-center">
+                              <img class="user-user-img img-fluid img-circle"
+                                  src="dist/img/user4-128x128.jpg" alt="User profile picture">
+                            </div>
+
+                            <h3 class="user-username text-center">User Name</h3>
+
+                            <p class="user-position text-muted text-center">User Position</p>
+
+                            <ul class="list-group list-group-unbordered mb-3">
+                              <li class="list-group-item">
+                                <b style="color: white">Gallery</b> <a class="float-right user-gallery">1,322</a>
+                              </li>
+                              <li class="list-group-item">
+                                <b  style="color: white">Articles</b> <a class="float-right user-articles">543</a>
+                              </li>
+                              <li class="list-group-item">
+                                <b  style="color: white">Likes</b> <a class="float-right user-likes">13,287</a>
+                              </li>
+                            </ul>
+                          </div>
+                          <!-- /.card-body -->
+                        </div>
+                        <!-- /.card -->
+
+                        <!-- About Me Box -->
+                        <div class="card card-primary">
+                          <div class="card-header">
+                            <h3 class="card-title">About Me</h3>
+                          </div>
+                          <!-- /.card-header -->
+                          <div class="card-body">
+
+                            <strong><i class="fas fa-map-marker-alt mr-1"></i> Location</strong>
+
+                            <p class="text-muted user-location">Douala, Cameroun</p>
+
+                            <hr>
+
+                            <strong><i class="far fa-file-alt mr-1"></i> Description</strong>
+
+                            <p class="text-muted user-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam fermentum enim neque.</p>
+                          </div>
+                          <!-- /.card-body -->
+                        </div>
+                        <!-- /.card -->
+                      </div>
+                      <!-- /.col -->
+                      <div class="col-md-9">
+                        <div class="card">
+                          <div class="card-header p-2">
+                            <ul class="nav nav-pills">
+                              <li class="nav-item"><a class="nav-link active" href="#activity" data-toggle="tab">Activity</a></li>
+                              <a class="nav-link float-right ml-1 btn bg-warning setbtn" href="user.html">Set</a>
+                            </ul>
+                          </div><!-- /.card-header -->
+                          <div class="card-body">
+                            <div class="tab-content">
+                              <div class="active tab-pane" id="activity">
+                                <!-- Post -->
+                                <div class="card-body table-responsive p-0">
+                                  <table class="table  table-hover" id="profile-activity-table">
+                                    <thead class="bg-success">
+                                      <tr>
+                                        <th style="width: 10px">Date</th>
+                                        <th>Type</th>
+                                        <th>Image</th>
+                                        <th style="width: 40%">Title</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                  </table>
+                                </div>
+                                <!-- /.post -->
+                              </div>
+                              <!-- /.tab-pane -->
+                            </div>
+                            <!-- /.tab-content -->
+                          </div><!-- /.card-body -->
+                        </div>
+                        <!-- /.card -->
+                      </div>
+                      <!-- /.col -->
+                    </div>
+                  </div>
+                </main> 
+              </div>
+            </div>
+          </section>
+      </div>
+
+      <footer class="main-footer bg-dark" style="margin-left: 0%;">
+        <div class="float-right d-none d-sm-block">
+        </div>
+        <strong>Copyright &copy; 2024 <a href="https://pcrn-org.com"> PCRN </a>.</strong> All rights reserved.
+      </footer>
+    </div>
+  </body>
+  <script src="../../src/js/back.js"></script> 
+  <script src="dist/js/api.js"></script> 
+  <script type="text/javascript">
+    feather.replace(); 
+    //load_datas();
+  </script>
+
+<script>
+  var ordersTable=document.getElementById('OrdersTable');
+  var orders=[
+    {
+    id:'1XXXXXXXX-XX',
+    Client:'Kuate Jean',
+    itemsCount:10,
+    total:135000,
+    status:'completed',
+    validator:'Kuete Marcel',
+    date:'01/02/2024',},
+    {
+    id:'2XXXXXXXX-XX',
+    Client:'Kuate Jean',
+    itemsCount:5,
+    total:19000,
+    status:'waiting',
+    validator:'-------',
+    date:'03/02/2024',},
+    {
+    id:'3XXXXXXXX-XX',
+    Client:'Kuate Jean',
+    itemsCount:5,
+    total:119000,
+    status:'archived',
+    validator:'-------',
+    date:'03/02/2024',},
+  ];
+  console.log(orders);
+  for(var i=0;i<orders.length;i++){
+    var element=orders[i];
+    addRowOrder(ordersTable,element);
+  }
+
+</script>
+  <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+  <!-- Ekko Lightbox -->
+  <script src="plugins/ekko-lightbox/ekko-lightbox.min.js"></script>
+  <!-- Filterizr-->
+  <script src="plugins/filterizr/jquery.filterizr.min.js"></script>
+  <!-- Bootstrap 4 -->
+  <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <!-- SweetAlert2 -->
+  <script src="plugins/sweetalert2/sweetalert2.min.js"></script>
+  <!-- Toastr -->
+  <script src="plugins/toastr/toastr.min.js"></script>
+  <!-- ChartJS -->
+  <script src="plugins/chart.js/Chart.min.js"></script>
+  <!-- Sparkline -->
+  <!-- JQVMap -->
+  <script src="plugins/jqvmap/jquery.vmap.min.js"></script>
+  <script src="plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
+  <!-- jQuery Knob Chart -->
+  <script src="plugins/jquery-knob/jquery.knob.min.js"></script>
+  <!-- daterangepicker -->
+  <script src="plugins/moment/moment.min.js"></script>
+  <script src="plugins/daterangepicker/daterangepicker.js"></script>
+  <!-- Tempusdominus Bootstrap 4 -->
+  <script src="plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+  <!-- Summernote -->
+  <script src="plugins/summernote/summernote-bs4.min.js"></script>
+  <!-- overlayScrollbars -->
+  <script src="plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+  <!-- AdminLTE App -->
+  <script src="dist/js/adminlte.js"></script>
+  <!-- AdminLTE for demo purposes -->
+  <script src="dist/js/demo.js"></script>
+  <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+  <script src="dist/js/pages/dashboard.js"></script>
+  <script>
+    $.widget.bridge('uibutton', $.ui.button)
+  </script>
+  <script>
+    function getLastSixMonths(){
+      var months  = ['January', 'February', 'March', 'April', 'May', 'June', 'July','August','September','October','November','December'];
+
+      const actualDate = new Date().getMonth();
+      var shorted=[]
+      for (let index = 0; index < 6; index++ ) {
+        if(actualDate-index>=0)
+        shorted.push(months[actualDate-index]);
+      else
+        shorted.push(months[actualDate-index+12]);
+      }
+      var shorted = shorted.reverse()
+      return shorted
+    }
+    $(async function () {
+
+      dashboard_vars = await load_dashboard();
+      document.getElementById('dashboard_vars_clients').innerText = dashboard_vars.clients;
+      document.getElementById('dashboard_vars_cotisations').innerHTML = dashboard_vars.sales +'<sup style="font-size: 20px">Fcfa</sup></h3>';
+      document.getElementById('progress2').style.visibility='hidden';
+      //-------------
+      //- BAR CHART -
+      //-------------
+      
+      var salesChartCanvas = document.getElementById('revenue-chart-canvas').getContext('2d')
+      
+      var areaChartOptions = {
+        maintainAspectRatio: false,
+        responsive: true,
+        legend: {
+          display: true
+        },
+        scales: {
+          xAxes: [{
+            gridLines: {
+              display: false
+            }
+          }],
+          yAxes: [{
+            gridLines: {
+              display: false
+            },
+            ticks: {
+                min: 0
+            }
+          }]
+        }
+      }
+
+      var areaChartData = {
+        labels  : getLastSixMonths(),
+        datasets: [
+          {
+            label               : 'Clients',
+            backgroundColor     : 'rgba(0,70,33,0.9)',
+            borderColor         : 'rgba(0,70,33,0.8)',
+            pointRadius          : false,
+            pointColor          : '#3b8bba',
+            pointStrokeColor    : 'rgba(0,70,33,1)',
+            pointHighlightFill  : '#fff',
+            pointHighlightStroke: 'rgba(0,70,33,1)',
+            data                : dashboard_vars.chartClients.reverse()
+          },
+        ]
+      }
+      
+      var salesChartData = {
+        labels  : getLastSixMonths(),
+        datasets: [
+          {
+            label               : 'Cotisations',
+            backgroundColor     : 'rgba(210, 214, 222, 1)',
+            borderColor         : 'rgba(210, 214, 222, 1)',
+            pointRadius         : false,
+            pointColor          : 'rgba(210, 214, 222, 1)',
+            pointStrokeColor    : '#c1c7d1',
+            pointHighlightFill  : '#fff',
+            pointHighlightStroke: 'rgba(220,220,220,1)',
+            data                : dashboard_vars.chartCotisations.reverse()
+          },
+        ]
+      }
+      
+      var salesChart = new Chart(salesChartCanvas, { 
+        type: 'line',
+        data: areaChartData,
+        options: areaChartOptions
+      })
+
+      var barChartCanvas = $('#barChart').get(0).getContext('2d')
+      var barChartData = $.extend(true, {}, salesChartData)
+      var temp0 = salesChartData.datasets[0]
+      barChartData.datasets[0] = temp0
+
+      var barChartOptions = {
+        responsive              : true,
+        maintainAspectRatio     : false,
+        datasetFill             : false,
+        scales: {
+          xAxes: [{
+            gridLines: {
+              display: false
+            }
+          }],
+          yAxes: [{
+            gridLines: {
+              display: false
+            },
+            ticks: {
+                min: 0
+            }
+          }]
+        }
+      }
+
+      new Chart(barChartCanvas, {
+        type: 'bar',
+        data: barChartData,
+        options: barChartOptions
+      })
+
+    })
+    
+  </script>
+</html>
