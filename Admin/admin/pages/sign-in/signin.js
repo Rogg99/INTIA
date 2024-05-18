@@ -63,7 +63,7 @@ async function fetch_userdatas(email,token){
 
     var res=true;
     try {
-      const response = await fetch(API_URL+"user/getwithemail?email="+email, requestOptions);
+      const response = await fetch(API_URL+"user/getwithemailandpwd?email="+email+"&password=123", requestOptions);
       const result = await response.json();
       console.log(result)
       console.log('hi ***********')

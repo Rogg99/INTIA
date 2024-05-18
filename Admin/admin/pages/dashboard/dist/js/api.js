@@ -92,7 +92,6 @@ async function fetch_userdatas(email,token){
     return res;
 }
 
-
 async function fetch_userdatas_byId(id){
     const myHeaders = new Headers();
     myHeaders.append("Authorization", "Bearer "+getCookie('user-token'));
@@ -131,7 +130,7 @@ async function fetch_userdatas_byId(id){
     return res;
 }
 
-async function fetch_candidates(position){
+async function fetch_succursales(position){
     const myHeaders = new Headers();
     myHeaders.append("Authorization", "Bearer "+getCookie('user-token'));
     loader.style.visibility='visible';
@@ -147,12 +146,12 @@ async function fetch_candidates(position){
 
     var res=true;
     try {
-      const response = await fetch(API_URL+"headoflists/get?position="+position, requestOptions);
+      const response = await fetch(API_URL+"succursales/get?position="+position, requestOptions);
       const result = await response.json();
       console.log(result);
       if(result.error==false)
       result.data.forEach(element => {
-        Candidates.push(element)
+        Succursales.push(element)
       });
       
 
@@ -165,7 +164,7 @@ async function fetch_candidates(position){
     return res;
 }
 
-async function fetch_events(position){
+async function fetch_clients(position){
     const myHeaders = new Headers();
     myHeaders.append("Authorization", "Bearer "+getCookie('user-token'));
     loader.style.visibility='visible';
@@ -181,12 +180,12 @@ async function fetch_events(position){
 
     var res=true;
     try {
-      const response = await fetch(API_URL+"events/get?position="+position, requestOptions);
+      const response = await fetch(API_URL+"clients/get?position="+position, requestOptions);
       const result = await response.json();
       console.log(result);
       if(result.error==false)
       result.data.forEach(element => {
-        Events.push(element)
+        Clients.push(element)
       });
       
 
@@ -199,7 +198,7 @@ async function fetch_events(position){
     return res;
 }
 
-async function fetch_petitions(position){
+async function fetch_assurances(position){
     const myHeaders = new Headers();
     myHeaders.append("Authorization", "Bearer "+getCookie('user-token'));
     loader.style.visibility='visible';
@@ -214,12 +213,12 @@ async function fetch_petitions(position){
 
     var res=true;
     try {
-      const response = await fetch(API_URL+"petitions/get?position="+position, requestOptions);
+      const response = await fetch(API_URL+"assurances/get?position="+position, requestOptions);
       const result = await response.json();
       console.log(result);
       if(result.error==false)
       result.data.forEach(element => {
-        Petitions.push(element)
+        Assurances.push(element)
       });
       
 
@@ -247,7 +246,7 @@ async function fetch_users(position){
 
     var res=true;
     try {
-      const response = await fetch(API_URL+"user/admins/get?position="+position, requestOptions);
+      const response = await fetch(API_URL+"users/get?position="+position, requestOptions);
       const result = await response.json();
       console.log(result);
       if(result.error==false)
@@ -265,7 +264,7 @@ async function fetch_users(position){
     return res;
 }
 
-async function fetch_adhesions(position){
+async function fetch_userCotisations(position){
     const myHeaders = new Headers();
     myHeaders.append("Authorization", "Bearer "+getCookie('user-token'));
     loader.style.visibility='visible';
@@ -280,12 +279,12 @@ async function fetch_adhesions(position){
 
     var res=true;
     try {
-      const response = await fetch(API_URL+"adhesions/get?position="+position, requestOptions);
+      const response = await fetch(API_URL+"client/cotisations/get?position="+position, requestOptions);
       const result = await response.json();
       console.log(result);
       if(result.error==false)
       result.data.forEach(element => {
-        Adhesions.push(element)
+        userCotisations.push(element)
       });
       
 
@@ -298,140 +297,6 @@ async function fetch_adhesions(position){
     return res;
 }
 
-async function fetch_Shopitems(position){
-    const myHeaders = new Headers();
-    myHeaders.append("Authorization", "Bearer "+getCookie('user-token'));
-    loader.style.visibility='visible';
-    
-    const raw = "";
-    
-    const requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow"
-    };
-
-    var res=true;
-    try {
-      const response = await fetch(API_URL+"shopitems/get?position="+position, requestOptions);
-      const result = await response.json();
-      console.log(result);
-      if(result.error==false)
-      result.data.forEach(element => {
-        Shopitems.push(element)
-      });
-      
-
-    } catch (error) {
-      console.error(error);
-      toastr.error("Echec de l'operation!");
-      res=false;
-    };
-    loader.style.visibility='invisible';
-    return res;
-}
-
-async function fetch_Shoplists(position){
-    const myHeaders = new Headers();
-    myHeaders.append("Authorization", "Bearer "+getCookie('user-token'));
-    loader.style.visibility='visible';
-    
-    const raw = "";
-    
-    const requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow"
-    };
-
-    var res=true;
-    try {
-      const response = await fetch(API_URL+"shoplists/get?position="+position, requestOptions);
-      const result = await response.json();
-      console.log(result);
-      if(result.error==false)
-      result.data.forEach(element => {
-        Orders.push(element)
-      });
-      
-
-    } catch (error) {
-      console.error(error);
-      toastr.error("Echec de l'operation!");
-      res=false;
-    };
-    loader.style.visibility='invisible';
-    return res;
-}
-
-async function fetch_news(position){
-    const myHeaders = new Headers();
-    myHeaders.append("Authorization", "Bearer "+getCookie('user-token'));
-    loader.style.visibility='visible';
-    
-    const raw = "";
-    
-    const requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow"
-    };
-
-    var res=true;
-    try {
-      const response = await fetch(API_URL+"articles/get?position="+position, requestOptions);
-      const result = await response.json();
-      console.log(result);
-      if(result.error==false)
-      result.data.forEach(element => {
-        News.push(element)
-      });
-      
-
-    } catch (error) {
-      console.error(error);
-      toastr.error("Echec de l'operation!");
-      res=false;
-    };
-    loader.style.visibility='invisible';
-    return res;
-}
-
-async function fetch_gallery(position){
-    const myHeaders = new Headers();
-    myHeaders.append("Authorization", "Bearer "+getCookie('user-token'));
-    loader.style.visibility='visible';
-    if (position)
-        position=position
-    else position=0
-    
-    const raw = "";
-    
-    const requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow"
-    };
-
-    var res=true;
-    try {
-      const response = await fetch(API_URL+"gallery/images?position="+position, requestOptions);
-      const result = await response.json();
-      console.log(result);
-      if(result.error==false)
-      result.data.forEach(element => {
-        Gallery.push(element)
-      });
-      
-
-    } catch (error) {
-      console.error(error);
-      toastr.error("Echec de l'operation!");
-      res=false;
-    };
-    loader.style.visibility='invisible';
-    return Gallery;
-}
 
 async function set_Status(id,object,status){
     const myHeaders = new Headers();
@@ -500,36 +365,6 @@ async function load_dashboard(){
     return dashboard_vars;
 }
 
-async function load_site(){
-    const myHeaders = new Headers();
-    myHeaders.append("Authorization", "Bearer "+getCookie('user-token'));
-    loader.style.visibility='visible';
-    
-    const raw = '';
-    
-    const requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow"
-    };
-
-    var res=true;
-    try {
-      const response = await fetch(API_URL+"/dashboard/site", requestOptions);
-      const result = await response.json();
-      console.log(result);
-      if(result.error==false)
-      site_vars=result.data
-      if(result.error)
-      toastr.error("Echec de l'operation!");
-    } catch (error) {
-      console.error(error);
-      toastr.error("Echec de l'operation!");
-      res=false;
-    };
-    loader.style.visibility='invisible';
-    return site_vars;
-}
 
 async function load_object(id,objectName){
     const myHeaders = new Headers();

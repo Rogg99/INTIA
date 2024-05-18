@@ -9,15 +9,11 @@ var progressbar2=document.getElementById("progress2");
 var sectionTitle=document.getElementById("sectionTitle");
 var mail_input;
 var password_input; 
-var Candidates=[];
-var Events=[];
-var Petitions=[];
+var Clients=[];
+var Assurances=[];
 var Users=[];
-var Adhesions=[];
-var Shopitems=[];
-var Orders=[];
-var News=[];
-var Gallery=[];
+var userCotisations=[];
+var selected_userId='';
 
 function setCookie(cname, cvalue, exdays) {
   const d = new Date();
@@ -117,7 +113,7 @@ function caps(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 async function active(e){
-  var mains=['dashboard','site','gallery','events','shop','candidates','articles','users','petitions','adhesions','profile','user']
+  var mains=['dashboard','clients','users','assurances','userCotisations','succursales','profile']
 
   var sidebarmenu=document.getElementById('sidebarMenu')
   var nav_links=sidebarmenu.getElementsByClassName("nav-link");
@@ -140,127 +136,51 @@ async function active(e){
       sectionTitle.innerHTML= caps(mains[i]) + ' <img src="../../src/img/loading2.gif" height="30" width="30" id="progress2" style="visibility:hidden">';
     }
     else{
-      document.getElementById(mains[i]).style.display='none';
+      try{
+        document.getElementById(mains[i]).style.display='none';
+      }
+      catch(e){
+
+      }
     }
   }
-  if(e.classList.contains('site')){
-    document.getElementById('progress2').style.visibility='visible';
-    var site_vars={
-      banners:[],
-      promises:[],
-      bigs:[],
-      smalls:[],
-      bigvideo:[]
-    }
-    var subs=['banners','promises','bigphotos','bigvideo','smallgallery']
-    subs.forEach(element => {
-      const sitediv = document.getElementById('site');
-      const wkdiv = sitediv.getElementsByClassName(element)[0].innerHTML='';
-    });
-
-    site_vars = await load_site();
-    site_vars.banners.forEach(element => {
-      addBannerWidget(element);
-    });
-    site_vars.smalls.forEach(element => {
-      addMiniGalleryWidget(element);
-    });
-    
-    addBigvideoWidget(site_vars.bigvideo);
-    
-    site_vars.promises.forEach(element => {
-      addPromisesWidget(element);
-    });
-    site_vars.bigs.forEach(element => {
-      addBigImagessWidget(element);
-    });
-    document.getElementById('progress2').style.visibility='hidden';
-  }
   
-  if(e.classList.contains('gallery')){
+  if(e.classList.contains('assurances')){
     document.getElementById('progress2').style.visibility='visible';
-    const sitediv = document.getElementById('gallery');
-    sitediv.getElementsByClassName('row')[0].innerHTML='';
-    Gallery=[]
-    Gallery = await fetch_gallery(0);
-    Gallery.forEach(element => {
-      addGalleryWidget(element);
+    var tab = document.getElementById('assurancesTable');
+    tab.getElementsByTagName('tbody')[0].innerHTML='';
+    Assurances=[]
+    await fetch_assurances(0);
+    if(Assurances.length>0)
+    Assurances.forEach(element => {
+      addRowAssurances(element);
     });
     document.getElementById('progress2').style.visibility='hidden';
   }
 
-  if(e.classList.contains('shop')){
+  if(e.classList.contains('clients')){
     document.getElementById('progress2').style.visibility='visible';
-    var tab = document.getElementById('productsTable');
+    var tab = document.getElementById('clientsTable');
     tab.getElementsByTagName('tbody')[0].innerHTML='';
-    Shopitems=[]
-    await fetch_Shopitems(0);
-    console.log(Shopitems.length)
-
-    if(Shopitems.length>0)
-    Shopitems.forEach(element => {
-      addRowProduct(element);
-    });
-    var tabo = document.getElementById('OrdersTable');
-    tabo.getElementsByTagName('tbody')[0].innerHTML='';
-    Orders=[]
-    await fetch_Shoplists(0);
-    if(Orders.length>0)
-    Orders.forEach(element => {
-      addRowOrder(element);
-    });
-    document.getElementById('progress2').style.visibility='hidden';
-  }
-  
-  if(e.classList.contains('candidates')){
-    document.getElementById('progress2').style.visibility='visible';
-    var tab = document.getElementById('candidatesTable');
-    tab.getElementsByTagName('tbody')[0].innerHTML='';
-    Candidates=[]
-    await fetch_candidates(0);
-    if(Candidates.length>0)
-    Candidates.forEach(element => {
-      addRowCandidates(element);
-    });
-    document.getElementById('progress2').style.visibility='hidden';
-  }
-
-  if(e.classList.contains('articles')){
-    document.getElementById('progress2').style.visibility='visible';
-    var tab = document.getElementById('newsTable');
-    tab.getElementsByTagName('tbody')[0].innerHTML='';
-    News=[]
-    await fetch_news(0);
+    Clients=[]
+    await fetch_clients(0);
     console.log(News)
-    if(News.length>0)
-    News.forEach(element => {
-      addRowNews(element);
+    if(Clients.length>0)
+    Clients.forEach(element => {
+      addRowClients(element);
     });
     document.getElementById('progress2').style.visibility='hidden';
   }
 
-  if(e.classList.contains('events')){
+  if(e.classList.contains('userCotisations')){
     document.getElementById('progress2').style.visibility='visible';
-    var tab = document.getElementById('eventsTable');
+    var tab = document.getElementById('cotisationsTable');
     tab.getElementsByTagName('tbody')[0].innerHTML='';
-    Events=[]
-    await fetch_events(0);
-    if(Events.length>0)
-    Events.forEach(element => {
-      addRowEvents(element);
-    });
-    document.getElementById('progress2').style.visibility='hidden';
-  }
-
-  if(e.classList.contains('petitions')){
-    document.getElementById('progress2').style.visibility='visible';
-    var tab = document.getElementById('petitionsTable');
-    tab.getElementsByTagName('tbody')[0].innerHTML='';
-    Petitions=[]
-    await fetch_petitions(0);
-    if(Petitions.length>0)
-    Petitions.forEach(element => {
-      addRowPetitions(element);
+    userCotisations=[]
+    await fetch_userCotisations(selected_userId,0);
+    if(userCotisations.length>0)
+    userCotisations.forEach(element => {
+      addRowuserCotisations(element);
     });
     document.getElementById('progress2').style.visibility='hidden';
   }
@@ -278,56 +198,19 @@ async function active(e){
     document.getElementById('progress2').style.visibility='hidden';
   }
 
-  if(e.classList.contains('adhesions')){
+  if(e.classList.contains('succursales')){
     document.getElementById('progress2').style.visibility='visible';
-    var tab = document.getElementById('adhesionsTable');
+    var tab = document.getElementById('succursalesTable');
     tab.getElementsByTagName('tbody')[0].innerHTML='';
-    Adhesions=[]
-    await fetch_adhesions(0);
-    if(Adhesions.length>0)
-    Adhesions.forEach(element => {
-      addRowAdhesions(element);
+    Succursales=[]
+    await fetch_succursales(0);
+    if(Succursales.length>0)
+    Succursales.forEach(element => {
+      addRowSuccursales(element);
     });
     document.getElementById('progress2').style.visibility='hidden';
   }
 
-  if(e.classList.contains('profile')){
-    document.getElementById('progress2').style.visibility='visible';
-    var user_datas2 = await fetch_userdatas_byId(getCookie('user-id'));
-    //settings
-    document.getElementsByClassName('profile-input-userfname')[0].value=getCookie('username');
-    document.getElementsByClassName('profile-input-usersname')[0].value=getCookie('userpre');
-    document.getElementsByClassName('profile-input-description')[0].value=getCookie('user-description');
-    document.getElementsByClassName('profile-input-location')[0].value=getCookie('user-city')+','+getCookie('user-country');
-    //profile
-    document.getElementsByClassName('profile-username')[0].innerText=getCookie('username')+' '+getCookie('userpre');
-    document.getElementsByClassName('profile-position')[0].innerText=getCookie('user-role');
-
-    if(getCookie('userphoto')!='' && getCookie('userphoto')!='none')
-      document.getElementsByClassName('profile-user-img')[0].src=API_URL+getCookie('userphoto');
-    else
-      document.getElementsByClassName('profile-user-img')[0].src='dist/img/usericon.png';
-
-    document.getElementsByClassName('profile-description')[0].innerText=getCookie('user-description');
-    document.getElementsByClassName('profile-location')[0].innerText=getCookie('user-city')+','+getCookie('user-country');
-
-    //stats
-    if(!isNaN(parseInt(user_datas2.gallery))){
-      document.getElementsByClassName('profile-gallery')[0].innerText=user_datas2.gallery;
-      document.getElementsByClassName('profile-likes')[0].innerText=user_datas2.likes;
-      document.getElementsByClassName('profile-articles')[0].innerText=user_datas2.articles;
-    }
-    //activity
-    if(user_datas2.activity+'' != 'undefined' & user_datas2.activity.length>0){
-      const tableprof = document.getElementById('profile-activity-table')
-      tableprof.getElementsByTagName('tbody')[0].innerHTML='';
-      user_datas2.activity.forEach(element => {
-        addRowActivity(element);
-      });
-    }
-
-    document.getElementById('progress2').style.visibility='hidden';
-  }
 
 }
 
@@ -447,46 +330,8 @@ function getState(time){
   }
 }
 
-function addRowOrder(element){
-  const table = document.getElementById('OrdersTable')
-  var tbodyRef = table.getElementsByTagName('tbody')[0];
-  var eltIdx=tbodyRef.childElementCount;
-  var row = tbodyRef.insertRow(-1);
-  row.addEventListener("click", function(event) {
-    //hideDevicetr(this);
-  });
-  var status='bg-success';
-  if(element.status=='completed')
-    status='bg-success';
-  else if(element.status=='waiting')
-    status='bg-warning';
-  else
-    status='bg-danger';
-  var actions='';
-  if(element.status!='archived')
-    actions = '<button class="btn btn-danger" style="margin-right: 10px">'
-                      +'<span data-feather="archive"></span> Archive </button>';
-
-  if(element.status=='waiting')
-    actions +='<button class="btn btn-success" style="margin-right: 10px"><span data-feather="check"></span> Activate </button>';
-
-  tbodyRef.innerHTML+=
-              '<tr onclick="openOrder(\''+element.id+'\')">'
-                +'<td style="width: 10px">#</td>'
-                +'<td>'+element.date+'</td>'
-                +'<td>'+element.id+'</td>'
-                +'<td>'+element.Client+'</td>'
-                +'<td>'+element.itemsCount+'</td>'
-                +'<td>'+element.total+'</td>'
-                +'<td>'+element.validator+'</td>'
-                +'<td class="'+status+'">'+element.status+'</td>'
-                +'<td>'+actions+'</td>'
-              +'</tr>';
-
-}
-
-function addRowProduct(element){
-  const table = document.getElementById('productsTable')
+function addRowAssurances(element){
+  const table = document.getElementById('assurancesTable')
   var tbodyRef = table.getElementsByTagName('tbody')[0];
 
   var status='bg-success';
@@ -512,232 +357,11 @@ function addRowProduct(element){
     actions +='<button class="btn btn-success" style="margin-right: 10px"><span data-feather="check"></span> Activate </button>';
    
   tbodyRef.innerHTML+=
-              '<tr onclick="openProduct(\''+element.id+'\')">'
-                +'<td>'+element.title+'</td>'
-                +'<td><img src="'+API_URL+element.image+'" width="50"  height="50"></td>'
-                +'<td>'+element.price+'</td>'
-                +'<td>'+element.reduction+'</td>'
-                +'<td>'+element.sells+'</td>'
-                +'<td>'+element.creatorName+'</td>'
-                +'<td class="'+status+'">'+statusTxt+'</td>'
-                +'<td>'+actions+'</td>'
-              +'</tr>';
-
-}
-
-function addRowNews(element){
-  console.log('adding news row')
-  const table = document.getElementById('newsTable')
-  var tbodyRef = table.getElementsByTagName('tbody')[0];
-
-  var status='bg-success';
-  var statusTxt='waiting';
-  if(element.statut=='2'){
-    status='bg-success';
-    statusTxt='published';
-  }
-  else if(element.statut=='1'){
-    status='bg-warning';
-    statusTxt='waiting';
-  }
-  else{
-    status='bg-danger';
-    statusTxt='archived';
-  }
-  var actions='';
-  if(element.statut!='5')
-    actions = '<button class="btn btn-danger" style="margin-right: 10px">'
-                      +'<span data-feather="archive"></span> Archive </button>';
-
-  if(element.statut=='1')
-    actions +='<button class="btn btn-success" style="margin-right: 10px"><span data-feather="check"></span> Activate </button>';
-
-  tbodyRef.innerHTML+=
-              '<tr onclick="openNews(\''+element.id+'\')">'
-                +'<td>'+timeConverter(element.creation_date)+'</td>'
-                +'<td>'+element.title+'</td>'
-                +'<td><img src="'+API_URL+element.image+'" width="50"  height="50"></td>'
-                +'<td>'+element.comments+'</td>'
-                +'<td>'+element.reactions+'</td>'
-                +'<td>'+element.creatorName+'</td>'
-                +'<td class="'+status+'">'+statusTxt+'</td>'
-                +'<td>'+actions+'</td>'
-              +'</tr>';
-
-}
-
-function addRowEvents(element){
-  const table = document.getElementById('eventsTable')
-  var tbodyRef = table.getElementsByTagName('tbody')[0];
-
-  var status='bg-success';
-  var statusTxt='waiting';
-  if(element.statut=='2'){
-    status='bg-success';
-    statusTxt='published';
-  }
-  else if(element.statut=='1'){
-    status='bg-warning';
-    statusTxt='waiting';
-  }
-  else{
-    status='bg-danger';
-    statusTxt='archived';
-  }
-  var actions='';
-  if(element.statut!='5')
-    actions = '<button class="btn btn-danger" style="margin-right: 10px">'
-                      +'<span data-feather="archive"></span> Archive </button>';
-
-  if(element.statut=='1')
-    actions +='<button class="btn btn-success" style="margin-right: 10px"><span data-feather="check"></span> Activate </button>';
-  
-  if(element.article.length>8)
-    articleAction = '<a class="btn btn-success" href="article.html?edit=false&id='+element.article+'" > Open </a>';
-
-  else
-    articleAction = '<a class="btn btn-primary" href="article.html?event_id='+element.id+'" > Add Article </a>';
-
-  tbodyRef.innerHTML+=
-              '<tr onclick="openEvent(\''+element.id+'\')">'
-                +'<td>'+element.title+'</td>'
-                +'<td>'+timeConverter(element.start_date)+'</td>'
-                +'<td>'+timeConverter(element.end_date)+'</td>'
-                +'<td>'+element.place+'</td>'
-                +'<td>'+element.creatorName+'</td>'
-                +'<td>'+articleAction+'</td>'
-                +'<td class="'+status+'">'+statusTxt+'</td>'
-                +'<td>'+actions+'</td>'
-              +'</tr>';
-
-}
-
-function addRowPetitions(element){
-  const table = document.getElementById('petitionsTable')
-  var tbodyRef = table.getElementsByTagName('tbody')[0];
-
-  var status='bg-success';
-  var statusTxt='waiting';
-  if(element.statut=='2'){
-    status='bg-success';
-    statusTxt='published';
-  }
-  else if(element.statut=='1'){
-    status='bg-warning';
-    statusTxt='waiting';
-  }
-  else{
-    status='bg-danger';
-    statusTxt='archived';
-  }
-  var actions='';
-  if(element.statut!='5')
-    actions = '<button class="btn btn-danger" style="margin-right: 10px">'
-                      +'<span data-feather="archive"></span> Archive </button>';
-
-  if(element.statut=='1')
-    actions +='<button class="btn btn-success" style="margin-right: 10px"><span data-feather="check"></span> Activate </button>';
-
-  if(element.article.length>8)
-    articleAction = '<a class="btn btn-success" href="article.html?edit=false&id='+element.article+'" > Open </a>';
-
-  else
-    articleAction = '<a class="btn btn-primary" href="article.html?event_id='+element.id+'" > Add Article </a>';
-
-  tbodyRef.innerHTML+=
-              '<tr onclick="openPetition(\''+element.id+'\')">'
-                +'<td>'+element.title+'</td>'
-                +'<td>'+element.goal+'</td>'
-                +'<td>'+element.signatures+'</td>'
-                +'<td>'+element.creatorName+'</td>'
-                +'<td>'+articleAction+'</td>'
-                +'<td class="'+status+'">'+statusTxt+'</td>'
-                +'<td>'+actions+'</td>'
-              +'</tr>';
-
-}
-
-function addRowCandidates(element){
-  const table = document.getElementById('candidatesTable')
-  var tbodyRef = table.getElementsByTagName('tbody')[0];
-
-  var status='bg-success';
-  var statusTxt='waiting';
-  if(element.statut=='2'){
-    status='bg-success';
-    statusTxt='published';
-  }
-  else if(element.statut=='1'){
-    status='bg-warning';
-    statusTxt='waiting';
-  }
-  else{
-    status='bg-danger';
-    statusTxt='archived';
-  }
-  var actions='';
-  if(element.statut!='5')
-    actions = '<button class="btn btn-danger" style="margin-right: 10px">'
-                      +'<span data-feather="archive"></span> Archive </button>';
-
-  if(element.statut=='1')
-    actions +='<button class="btn btn-success" style="margin-right: 10px"><span data-feather="check"></span> Activate </button>';
-
-  if(element.article.length>8)
-    articleAction = '<a class="btn btn-success" href="article.html?edit=false&id='+element.article+'" > Open </a>';
-
-  else
-    articleAction = '<a class="btn btn-primary" href="article.html?event_id='+element.id+'" > Add Article </a>';
-
-  tbodyRef.innerHTML+=
-              '<tr onclick="openCandidate(\''+element.id+'\')">'
-                +'<td>'+element.firstName+' '+element.secondName+'</td>'
-                +'<td><img src="'+API_URL+element.image+'" width="50"  height="50"></td>'
-                +'<td>'+element.city+'</td>'
-                +'<td>'+element.position+'</td>'
-                +'<td>'+element.creatorName+'</td>'
-                +'<td>'+articleAction+'</td>'
-                +'<td class="'+status+'">'+statusTxt+'</td>'
-                +'<td>'+actions+'</td>'
-              +'</tr>';
-
-}
-
-function addRowAdhesions(element){
-  const table = document.getElementById('adhesionsTable')
-  var tbodyRef = table.getElementsByTagName('tbody')[0];
-
-  var status='bg-success';
-  var statusTxt='waiting';
-  if(element.statut=='2'){
-    status='bg-success';
-    statusTxt='published';
-  }
-  else if(element.statut=='1'){
-    status='bg-warning';
-    statusTxt='waiting';
-  }
-  else{
-    status='bg-danger';
-    statusTxt='archived';
-  }
-  var actions='';
-  if(element.statut!='5')
-    actions = '<button class="btn btn-danger" style="margin-right: 10px">'
-                      +'<span data-feather="archive"></span> Archive </button>';
-
-  if(element.statut=='1')
-    actions +='<button class="btn btn-success" style="margin-right: 10px"><span data-feather="check"></span> Activate </button>';
-
-  tbodyRef.innerHTML+=
-              '<tr onclick="openAdhesion(\''+element.id+'\')">'
-                +'<td>'+timeConverter(element.creation_date)+'</td>'
-                +'<td>'+element.name+'</td>'
-                +'<td><img src="'+API_URL+element.image+'" width="50"  height="50"></td>'
-                +'<td>'+element.city+'</td>'
-                +'<td>'+element.country+'</td>'
-                +'<td>'+element.creatorName+'</td>'
-                +'<td>'+articleAction+'</td>'
+              '<tr onclick="openOrder(\''+element.id+'\')">'
+              +'<td>'+timeConverter(element.creation_date)+'</td>'
+                +'<td>'+element.client_name+'</td>'
+                +'<td>'+element.branch_name+'</td>'
+                +'<td>'+element.type+'</td>'
                 +'<td class="'+status+'">'+statusTxt+'</td>'
                 +'<td>'+actions+'</td>'
               +'</tr>';
@@ -771,48 +395,141 @@ function addRowUsers(element){
     actions +='<button class="btn btn-success" style="margin-right: 10px"><span data-feather="check"></span> Activate </button>';
 
   
-  var image=API_URL+element.image
+  var image=API_URL+element.photo
   if(element.image=='none' || element.image=='')
     image = 'dist/img/usericon.png'
 
   tbodyRef.innerHTML+=
               '<tr onclick="show_user_Profile(\''+element.id+'\')">'
-                +'<td>'+timeConverter(element.creation_date)+'</td>'
                 +'<td>'+element.nom +' ' +element.prenom +'</td>'
                 +'<td><img src="'+image+'" width="50"  height="50"></td>'
-                +'<td>'+element.city+'</td>'
-                +'<td>'+element.country+'</td>'
-                +'<td>'+element.type+'</td>'
+                +'<td>'+element.position+'</td>'
+                +'<td>'+element.branche_name+'</td>'
                 +'<td class="'+status+'">'+statusTxt+'</td>'
                 +'<td>'+actions+'</td>'
               +'</tr>';
 
 }
 
-function addRowActivity(element){
-  const table = document.getElementById('profile-activity-table')
+function addRowClients(element){
+  const table = document.getElementById('clientsTable')
   var tbodyRef = table.getElementsByTagName('tbody')[0];
 
+  var status='bg-success';
+  var statusTxt='waiting';
+  if(element.statut=='2'){
+    status='bg-success';
+    statusTxt='published';
+  }
+  else if(element.statut=='1'){
+    status='bg-warning';
+    statusTxt='waiting';
+  }
+  else{
+    status='bg-danger';
+    statusTxt='archived';
+  }
+  var actions='';
+  if(element.statut!='5')
+    actions = '<button class="btn btn-danger" style="margin-right: 10px">'
+                      +'<span data-feather="archive"></span> Archive </button>';
+
+  if(element.statut=='1')
+    actions +='<button class="btn btn-success" style="margin-right: 10px"><span data-feather="check"></span> Activate </button>';
+
+  
+  var image=API_URL+element.image
+  if(element.image=='none' || element.image=='')
+    image = 'dist/img/usericon.png'
+
   tbodyRef.innerHTML+=
-              '<tr>'
-                +'<td>'+element.date+'</td>'
-                +'<td> Ajout d\'un(e) '+element.type+'</td>'
-                +'<td>'+element.image+'</td>'
-                +'<td>'+element.title+'</td>'
+              '<tr onclick="show_user_Profile(\''+element.id+'\')">'
+                +'<td>'+element.nom +' ' +element.prenom +'</td>'
+                +'<td><img src="'+image+'" width="50"  height="50"></td>'
+                +'<td>'+element.position+'</td>'
+                +'<td>'+element.branch_name+'</td>'
+                +'<td class="'+status+'">'+statusTxt+'</td>'
+                +'<td>'+actions+'</td>'
               +'</tr>';
 
 }
 
-function addRowActivityUser(element){
-  const table = document.getElementById('user-activity-table')
+function addRowuserCotisations(element){
+  const table = document.getElementById('userCotisationsTable')
   var tbodyRef = table.getElementsByTagName('tbody')[0];
 
+  var status='bg-success';
+  var statusTxt='waiting';
+  if(element.statut=='2'){
+    status='bg-success';
+    statusTxt='published';
+  }
+  else if(element.statut=='1'){
+    status='bg-warning';
+    statusTxt='waiting';
+  }
+  else{
+    status='bg-danger';
+    statusTxt='archived';
+  }
+  var actions='';
+  if(element.statut!='5')
+    actions = '<button class="btn btn-danger" style="margin-right: 10px">'
+                      +'<span data-feather="archive"></span> Archive </button>';
+
+  if(element.statut=='1')
+    actions +='<button class="btn btn-success" style="margin-right: 10px"><span data-feather="check"></span> Activate </button>';
+
+  
+  var image=API_URL+element.image
+  if(element.image=='none' || element.image=='')
+    image = 'dist/img/usericon.png'
+
   tbodyRef.innerHTML+=
-              '<tr>'
-                +'<td>'+element.date+'</td>'
-                +'<td> Ajout d\'un(e) '+element.type+'</td>'
-                +'<td>'+element.image+'</td>'
-                +'<td>'+element.title+'</td>'
+              '<tr onclick="show_user_Profile(\''+element.id+'\')">'
+              +'<td>'+timeConverter(element.creation_date)+'</td>'
+                +'<td>'+element.amount+'</td>'
+              +'</tr>';
+
+}
+
+function addRowSuccursales(element){
+  const table = document.getElementById('succursalesTable')
+  var tbodyRef = table.getElementsByTagName('tbody')[0];
+
+  var status='bg-success';
+  var statusTxt='waiting';
+  if(element.statut=='2'){
+    status='bg-success';
+    statusTxt='published';
+  }
+  else if(element.statut=='1'){
+    status='bg-warning';
+    statusTxt='waiting';
+  }
+  else{
+    status='bg-danger';
+    statusTxt='archived';
+  }
+  var actions='';
+  if(element.statut!='5')
+    actions = '<button class="btn btn-danger" style="margin-right: 10px">'
+                      +'<span data-feather="archive"></span> Archive </button>';
+
+  if(element.statut=='1')
+    actions +='<button class="btn btn-success" style="margin-right: 10px"><span data-feather="check"></span> Activate </button>';
+
+  
+  var image=API_URL+element.image
+  if(element.image=='none' || element.image=='')
+    image = 'dist/img/usericon.png'
+
+  tbodyRef.innerHTML+=
+              '<tr onclick="show_user_Profile(\''+element.id+'\')">'
+                +'<td>'+element.nom +'</td>'
+                +'<td>'+element.localisation+'</td>'
+                +'<td class="'+status+'">'+statusTxt+'</td>'
+                +'<td>'+actions+'</td>'
               +'</tr>';
 
 }

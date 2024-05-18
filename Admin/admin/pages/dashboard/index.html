@@ -135,6 +135,12 @@
                           Users
                         </a>
                       </li>
+                      <li class="nav-item">
+                        <a class="nav-link succursales" onclick="active(this)" href="#">
+                          <span data-feather="users"></span>
+                          Succursales
+                        </a>
+                      </li>
                     </ul>
                   </div>
                 </nav>
@@ -480,41 +486,6 @@
     //load_datas();
   </script>
 
-<script>
-  var ordersTable=document.getElementById('OrdersTable');
-  var orders=[
-    {
-    id:'1XXXXXXXX-XX',
-    Client:'Kuate Jean',
-    itemsCount:10,
-    total:135000,
-    status:'completed',
-    validator:'Kuete Marcel',
-    date:'01/02/2024',},
-    {
-    id:'2XXXXXXXX-XX',
-    Client:'Kuate Jean',
-    itemsCount:5,
-    total:19000,
-    status:'waiting',
-    validator:'-------',
-    date:'03/02/2024',},
-    {
-    id:'3XXXXXXXX-XX',
-    Client:'Kuate Jean',
-    itemsCount:5,
-    total:119000,
-    status:'archived',
-    validator:'-------',
-    date:'03/02/2024',},
-  ];
-  console.log(orders);
-  for(var i=0;i<orders.length;i++){
-    var element=orders[i];
-    addRowOrder(ordersTable,element);
-  }
-
-</script>
   <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
   <!-- Ekko Lightbox -->
   <script src="plugins/ekko-lightbox/ekko-lightbox.min.js"></script>
@@ -571,7 +542,7 @@
 
       dashboard_vars = await load_dashboard();
       document.getElementById('dashboard_vars_clients').innerText = dashboard_vars.clients;
-      document.getElementById('dashboard_vars_cotisations').innerHTML = dashboard_vars.sales +'<sup style="font-size: 20px">Fcfa</sup></h3>';
+      document.getElementById('dashboard_vars_cotisations').innerHTML = dashboard_vars.cotisations +'<sup style="font-size: 20px">Fcfa</sup></h3>';
       document.getElementById('progress2').style.visibility='hidden';
       //-------------
       //- BAR CHART -
